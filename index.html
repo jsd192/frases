@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Estación</title>
+    <style>
+        .mi-boton {
+            width: 150px;   /* Establece el ancho en píxeles */
+            height: 50px;   /* Establece la altura en píxeles */
+            font-size: 17px; /* Tamaño de la fuente */
+            background-color: #2d8b07de;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .mi-boton:hover {
+            background-color: #4ec51f;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        header {
+            background-color: #6200ea;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        nav {
+            margin: 1rem 0;
+            text-align: center;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        main {
+            padding: 2rem;
+            text-align: center;
+        }
+        footer {
+            background-color: #6200ea;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+    <script>
+        async function obtenerFrase() {
+        try {
+            // Obtener la frase en inglés desde quotable.io
+            const response = await fetch('https://api.quotable.io/random');
+            const data = await response.json();
+            const fraseEnIngles = `"${data.content}"\n\n • Autor: ${data.author}`;
+
+            // Traducir la frase a español usando la API no oficial de Google Translate
+            const traduccionResponse = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=es&dt=t&q=${encodeURIComponent(fraseEnIngles)}`);
+            const traduccionData = await traduccionResponse.json();
+
+            // Extraer la traducción del JSON recibido
+            const fraseEnEspañol = traduccionData[0].map(item => item[0]).join("");
+
+            // Mostrar la frase traducida en la página
+            document.getElementById('resultado').innerText = fraseEnEspañol;
+        } catch (error) {
+            document.getElementById('resultado').innerText = 'Error al obtener la frase';
+            console.error('Error:', error);
+        }
+    }
+    </script>    
+</head>
+<body>
+    <header>
+        <h1>La Estación</h1>
+        <nav>
+            <a href="http://artepinturasdextre.blogspot.com/2013/08/obras-de-arte.html">Inicio</a>
+            <a href="https://artec.ec/autor/soto-nestor/">Sobre mí</a>
+            <a href="https://hotmart.com/en/marketplace/products/pinturas-en-acrilico/F78990077V">Contacto</a>
+        </nav>
+    </header>
+    <main>
+        <h2>Frases Célebres</h2>
+        <p>Esta es un web que nos trae y nos muestra alguna frase célebre que nos hace pensar.</p>
+        <button class="mi-boton"onclick="obtenerFrase()">Frase del día</button>
+        <p id="resultado"></p>
+    </main>
+    <footer>
+        <p>&copy; 2025 Dextre La Estación</p>
+        <p>Jenrry Soto Dextre - Email: dextre1481@gmail.com</p>
+    </footer>
+</body>
+</html>
